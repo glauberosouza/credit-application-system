@@ -1,4 +1,4 @@
-package com.glauber.credit.application.system.dto
+package com.glauber.credit.application.system.dto.response
 
 import com.glauber.credit.application.system.enummeration.Status
 import com.glauber.credit.application.system.model.Credit

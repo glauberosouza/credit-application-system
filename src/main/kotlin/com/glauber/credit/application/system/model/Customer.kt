@@ -1,7 +1,6 @@
 package com.glauber.credit.application.system.model
 
 import jakarta.persistence.*
-import org.hibernate.annotations.Fetch
 import java.math.BigDecimal
 
 @Entity //Indico que essa classe será uma tabela do banco de dados e seus atributos serão as colunas

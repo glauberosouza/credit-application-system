@@ -2,7 +2,7 @@ package com.glauber.credit.application.system.controller
 
 import com.glauber.credit.application.system.dto.CustomerDto
 import com.glauber.credit.application.system.dto.CustomerUpdateDto
-import com.glauber.credit.application.system.dto.CustomerView
+import com.glauber.credit.application.system.dto.response.CustomerView
 import com.glauber.credit.application.system.model.Customer
 import com.glauber.credit.application.system.service.impl.CustomerService
 import jakarta.validation.Valid

@@ -1,10 +1,9 @@
 package com.glauber.credit.application.system.controller
 
 import com.glauber.credit.application.system.dto.CreditDto
-import com.glauber.credit.application.system.dto.CreditView
-import com.glauber.credit.application.system.dto.CreditViewList
+import com.glauber.credit.application.system.dto.response.CreditView
+import com.glauber.credit.application.system.dto.response.CreditViewList
 import com.glauber.credit.application.system.model.Credit
-import com.glauber.credit.application.system.model.Customer
 import com.glauber.credit.application.system.service.impl.CreditService
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
