@@ -3,8 +3,7 @@ package com.glauber.credit.application.system.model
 import jakarta.persistence.*
 import java.math.BigDecimal
 
-@Entity //Indico que essa classe será uma tabela do banco de dados e seus atributos serão as colunas
-//@Table(name = "Cliente") //Com essa anotação posso customizar o nome na tabela
+@Entity
 data class Customer(
         @Column(nullable = false) var firstName: String = " ",
         @Column(nullable = false) var lastName: String = "",

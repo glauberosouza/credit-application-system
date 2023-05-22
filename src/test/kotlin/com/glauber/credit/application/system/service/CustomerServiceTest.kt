@@ -19,25 +19,21 @@ import org.springframework.test.context.ActiveProfiles
 import java.math.BigDecimal
 import java.util.*
 
-// Boa prática repetir o nome da classe que vai testar e colocar test no final
-// Deve-se definir um banco de dados especifico para fazer os testes.
-// Posso duplicar o aplication.yml e deixar um como profile de testes.
-@ActiveProfiles("test") // É usada para ativar perfis específicos durante a execução dos testes. Não precisa aqui, pq n sobe o contexto do spring
-/*Dessa forma, você pode definir facilmente configurações específicas para o ambiente de teste e garantir
-que os testes sejam executados com os componentes e propriedades corretos ativados pelo perfil "test".*/
-@ExtendWith(MockKExtension::class) //Diz ao JUnit para aplicar a extensão do Mockito-Kotlin em testes na classe anotada
+
+@ActiveProfiles("test")
+@ExtendWith(MockKExtension::class)
 class CustomerServiceTest {
     @MockK
-    lateinit var customerRepository: CustomerRepository // Variável simulada para teste, inicialização posterior.
+    lateinit var customerRepository: CustomerRepository
 
     @InjectMockKs
-    lateinit var customerService: CustomerService // Variável injetada com dependências simuladas.
+    lateinit var customerService: CustomerService
 
     @Test
     fun `should create customer`() {
         // GIVEN - dados que preciso receber
         val fakeCustomer: Customer = buildCustomer()
-        every { customerRepository.save(any()) } returns fakeCustomer //Simulando save de um customer, retornando o fake
+        every { customerRepository.save(any()) } returns fakeCustomer
 
         // WHEN - Onde terei o método que vou testar
         val actual: Customer = customerService.save(fakeCustomer)
@@ -51,7 +47,7 @@ class CustomerServiceTest {
     @Test
     fun `should find customer by id`() {
         //GIVEN
-        val fakeId: Long = Random().nextLong() //Gerar um id para testar o método
+        val fakeId: Long = Random().nextLong()
         val fakeCustomer: Customer = buildCustomer(id = fakeId)
         every { customerRepository.findById(fakeId) } returns Optional.of(fakeCustomer)
         //WHEN
@@ -59,7 +55,7 @@ class CustomerServiceTest {
         //THEN
         Assertions.assertThat(actual).isNotNull
         Assertions.assertThat(actual)
-            .isExactlyInstanceOf(Customer::class.java) // Verificar se estar retornando um customer
+            .isExactlyInstanceOf(Customer::class.java)
         Assertions.assertThat(actual).isSameAs(fakeCustomer)
         verify(exactly = 1) { customerRepository.findById(fakeId) }
     }
@@ -68,13 +64,13 @@ class CustomerServiceTest {
     fun `should not find customer by invalid id and throw BussinesException`() {
         //GIVEN
         val fakeId: Long = Random().nextLong()
-        every { customerRepository.findById(fakeId) } returns Optional.empty() // Retornarndo vazio porque o customer n existe aqui
-        //  Optional vazio faz que ocorra a exception.
+        every { customerRepository.findById(fakeId) } returns Optional.empty()
+
         //WHEN
         //THEN
-        Assertions.assertThatExceptionOfType(BusinessException::class.java) // Confirmar se a exception de retorno é a bussinesException
+        Assertions.assertThatExceptionOfType(BusinessException::class.java)
             .isThrownBy { customerService.findById(fakeId) }
-            .withMessage("Id $fakeId not found!") //Verifiquei se a mensagem é a mesma mensagem do método testado
+            .withMessage("Id $fakeId not found!")
         verify(exactly = 1) { customerRepository.findById(fakeId) }
     }
 
@@ -93,7 +89,7 @@ class CustomerServiceTest {
     }
 
 
-    // Criei um buildCustomer para realizar os testes com todos os atributos de um customer poreḿ fake.
+
     private fun buildCustomer(
         firstName: String = "Glauber",
         lastName: String = "Souza",

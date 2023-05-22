@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import java.time.LocalDateTime
 
-@RestControllerAdvice // Estou indicando que dentro dessa classe têm alguns métodos
-//que estão definindo tratamento para minhas excecoes.
+@RestControllerAdvice
 class RestExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun handlerValidException(ex: MethodArgumentNotValidException): ResponseEntity<ExceptionDetails> {

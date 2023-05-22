@@ -17,9 +17,9 @@ import java.time.Month
 import java.util.*
 
 @ActiveProfiles("test")
-@DataJpaTest // Usada para testar interações com o banco de dados em um ambiente Spring Boot
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // Desativar a configuração automática do banco de dados durante os testes
-// Indicando explicitamente que deseja usar o banco de dados configurado no ambiente de teste, em vez de substituí-lo
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+
 class CreditrepositoryTest {
 
     @Autowired
@@ -27,16 +27,15 @@ class CreditrepositoryTest {
 
     @Autowired
     lateinit var testEntityManager: TestEntityManager
-    // Classe do spring para os testes de integração, gerenciamento de entitys pode ser feita durante os testes
 
     private lateinit var customer: Customer
     private lateinit var credit1: Credit
     private lateinit var credit2: Credit
-    // Indica que a inicialização da variável será feita posterior, em vez de exigir uma atribuição imediata
+
 
     @BeforeEach
-    fun setup() { // Anotação indica que esse método deve ser executado antes de cada teste.
-        customer = testEntityManager.persist(buildCustomer()) // Persiste um objeto customer no banco de dados.
+    fun setup() {
+        customer = testEntityManager.persist(buildCustomer())
         credit1 = testEntityManager.persist(buildCredit(customer = customer))
         credit2 = testEntityManager.persist(buildCredit(customer = customer))
     }

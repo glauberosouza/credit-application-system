@@ -23,7 +23,7 @@ import java.util.stream.Collectors
 class CreditController(
     private val creditService: CreditService
 ) {
-    @PostMapping //RequestBody -> pelo corpo da requisição
+    @PostMapping
     fun saveCredit(@RequestBody @Valid creditDto: CreditDto): ResponseEntity<String> {
         val credit: Credit = this.creditService.save(creditDto.toEntity())
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -39,10 +39,10 @@ class CreditController(
         return ResponseEntity.status(HttpStatus.OK).body(creditViewList)
     }
 
-    @GetMapping("/{creditCode}") // Não posso ter 2 gets iguais na url, não se pode ter o mesmo caminho
+    @GetMapping("/{creditCode}")
     fun findByCreditCode(
-        @RequestParam(value = "customerId") // No postman informar o customerId no Params
-        customerId: Long, @PathVariable creditCode: UUID //Obs: pegar o credit code para fazer a consulta no postman
+        @RequestParam(value = "customerId")
+        customerId: Long, @PathVariable creditCode: UUID
     ): ResponseEntity<CreditView> {
         val credit: Credit = this.creditService.findByCreditCode(customerId, creditCode)
         return ResponseEntity.status(HttpStatus.OK).body(CreditView(credit))

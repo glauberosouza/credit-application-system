@@ -22,35 +22,24 @@ import java.math.BigDecimal
 import java.util.*
 
 @SpringBootTest
-/*Isso permite que você use recursos do Spring, como a injeção de dependências, e execute os testes
-em um ambiente próximo ao ambiente de execução real da aplicação.*/
 @ActiveProfiles("test")
-/*Essa Anotação permite separar as configurações de teste das configurações de produção, garantindo que os
-testes sejam executados de forma consistente e controlada.*/
 @AutoConfigureMockMvc
-/*pode enviar solicitações HTTP simuladas para os controladores da aplicação e verificar as respostas recebidas.
-Isso ajuda a testar a camada de controle do aplicativo de forma isolada, sem a necessidade de iniciar um servidor HTTP real.*/
 @ContextConfiguration
-/*la permite configurar o contexto de teste personalizado, fornecendo informações sobre as classes de configuração,
-arquivos XML de configuração ou outros recursos necessários para a execução dos testes.*/
+
 class CustomerControllerTest {
-    /*O uso de lateinit var é útil quando se sabe que uma variável será inicializada em algum momento antes
-    de ser usada e queremos evitar a necessidade de atribuir um valor inicial imediatamente na declaração*/
 
     @Autowired
     private lateinit var customerRepository: CustomerRepository
 
     @Autowired
-    private lateinit var mockMvc: MockMvc // Injetando automaticamente um objeto chamado mockMvc na classe em que ela está sendo utilizada
+    private lateinit var mockMvc: MockMvc
 
     @Autowired
-    private lateinit var objectMapper: ObjectMapper //é uma biblioteca usada para converter objetos Java ou Kotlin em formatos de dados, como JSON, e vice-versa.
+    private lateinit var objectMapper: ObjectMapper
 
     companion object {
         const val URL: String = "/api/customers"
-        /* está definindo um membro estático dentro de uma classe. Esse membro é uma constante chamada URL,
-        que armazena a sequência "/api/customers". Essa constante pode ser acessada usando o nome da classe seguido de URL,
-        como por exemplo NomeDaClasse.URL, para obter o valor "/api/customers" em qualquer parte do programa.*/
+
     }
 
     @BeforeEach
@@ -58,21 +47,14 @@ class CustomerControllerTest {
 
     @AfterEach
     fun tearDown() = customerRepository.deleteAll()
-    /*Elas são responsáveis por garantir que o repositório de clientes esteja vazio antes de
-    cada teste e seja esvaziado após a execução de cada teste, garantindo a consistência e a independência dos testes.*/
 
     @Test
     fun `should creat a customer and return 201 status`() {
         //GIVEN
         val customerDto: CustomerDto = builderCustomerDto()
         val valueAsString: String = objectMapper.writeValueAsString(customerDto)
-        // Estou convertendo o Objeto CustomerDto em uma string JSON.
         //WHEN
         //THEN
-        /*Essa linha de código está simulando o envio de uma requisição POST para uma determinada
-        URL("/api/customers") usando o objeto mockMvc. Nessa requisição, estamos enviando um conteúdo no formato JSON.
-        Em seguida, estamos verificando se o status de resposta retornado é "Created"
-        (indicando que a requisição foi bem-sucedida).*/
         mockMvc.perform(
             MockMvcRequestBuilders.post(URL)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -87,15 +69,13 @@ class CustomerControllerTest {
             .andExpect(MockMvcResultMatchers.jsonPath("$.zipCode").value("000000"))
             .andExpect(MockMvcResultMatchers.jsonPath("$.street").value("Rua do glauber, 123"))
             .andDo(MockMvcResultHandlers.print())
-        /*Resumindo, esse código está testando se a resposta de uma requisição POST possui os
-        valores esperados para cada campo do JSON, e também exibe informações da resposta no console.*/
     }
 
     @Test
     fun `should not save a customer with same CPF and return 409 status`() {
         //GIVEN
         customerRepository.save(builderCustomerDto().toEntity())
-        val customerDto: CustomerDto = builderCustomerDto() // Criei outro Customer repetindo o cpf para testar
+        val customerDto: CustomerDto = builderCustomerDto()
         val valueAsString: String = objectMapper.writeValueAsString(customerDto)
         //WHEN
         //THEN
@@ -104,7 +84,7 @@ class CustomerControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(valueAsString)
         )
-            .andExpect(MockMvcResultMatchers.status().isConflict) // status 409 esperado
+            .andExpect(MockMvcResultMatchers.status().isConflict)
             .andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").exists())
             .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(409))
             .andExpect(
@@ -217,8 +197,9 @@ class CustomerControllerTest {
             .andExpect(MockMvcResultMatchers.jsonPath("$.details[*]").isNotEmpty)
             .andDo(MockMvcResultHandlers.print())
     }
+
     @Test
-    fun `should update a costumer and return status 200`(){
+    fun `should update a costumer and return status 200`() {
         //GIVEN
         val customer: Customer = customerRepository.save(builderCustomerDto().toEntity())
         val customerUpdateDto: CustomerUpdateDto = builderCustomerUpdateDto()
@@ -226,9 +207,6 @@ class CustomerControllerTest {
         //WHEN
         //THEN
         mockMvc.perform(
-            /*o uso do @RequestParam está relacionado ao trecho ?customerId=${customer.id} na URL,
-            onde o valor do parâmetro de consulta é passado e vinculado ao parâmetro do método usando
-            a anotação @RequestParam.*/
             MockMvcRequestBuilders.patch("$URL?customerId=${customer.id}")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(valueAsString)
@@ -243,8 +221,9 @@ class CustomerControllerTest {
             .andExpect(MockMvcResultMatchers.jsonPath("$.street").value("Rua Updated"))
             .andDo(MockMvcResultHandlers.print())
     }
+
     @Test
-    fun `should not update a customer with invalid id and return 400 status`(){
+    fun `should not update a customer with invalid id and return 400 status`() {
         //GIVEN
         val invalidId: Long = Random().nextLong()
         val customerUpdateDto: CustomerUpdateDto = builderCustomerUpdateDto()
@@ -252,9 +231,10 @@ class CustomerControllerTest {
         //WHEN
         //THEN
         mockMvc.perform(
-        MockMvcRequestBuilders.patch("$URL?customerId=$invalidId")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(valueAsString))
+            MockMvcRequestBuilders.patch("$URL?customerId=$invalidId")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(valueAsString)
+        )
             .andExpect(MockMvcResultMatchers.status().isBadRequest)
             .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Bad Request! Consult the documentation"))
             .andExpect(MockMvcResultMatchers.jsonPath("$.timestamp").exists())
@@ -286,6 +266,7 @@ class CustomerControllerTest {
         zipCode = zipCode,
         street = street
     )
+
     private fun builderCustomerUpdateDto(
         firstName: String = "GlauberUpdate",
         lastName: String = "SouzaUpdate",
