@@ -12,7 +12,7 @@ import java.time.LocalDate
 data class CreditDto(
     @field:NotNull val creditValue: BigDecimal,
     @field:Future val dayFirstInstallment: LocalDate,
-    @field:Min(value = 1) @field:Max(value = 48) val numberOfInstallment: Int,
+    val numberOfInstallment: Int,
     @field:NotNull(message = "Invalid input") val customerId: Long
 ) {
     fun toEntity(): Credit = Credit(
