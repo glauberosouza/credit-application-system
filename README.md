@@ -22,10 +22,6 @@
 > Estou trabalhando para completar a cobertura de testes.
 
 
-![img.png](img.png)
-#### Diagrama UML Simplificado da API para Sistema de Avaliação de Crédito
-
-
 ## API desenvolvida usando Spring Boot e Kotlin para fornecer aos clientes as seguintes funcionalidades:
 
 # Cliente (Customer):
@@ -66,7 +62,8 @@
 
     Requisição: customerId e creditCode
     Resposta: creditCode, creditValue, numberOfInstallment, status, emailCustomer e incomeCustomer
+    
 > Essas são apenas as descrições das requisições já implementadas.
-> Há outras funcionalidades que podem ser adicionadas à API, dependendo dos requisitos e necessidades do negócio.
+> Aos poucos, irei implementar novas funcionalidades e garantir a cobertura completa dos testes na API..
 
 
