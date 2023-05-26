@@ -40,7 +40,7 @@ class CreditControllerTest {
     lateinit var objectMapper: ObjectMapper
 
     @Test
-    fun shouldCreateCreditAndReturnStatus201() {
+    fun `should create credit and return status 201`() {
         // GIVEN
         val customerDto = CustomerDto(
             firstName = "Glauber",
